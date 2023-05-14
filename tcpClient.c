@@ -11,7 +11,7 @@
 #include <unistd.h> /* close */
 #include <string.h>
 
-#define SERVER_PORT 12585
+#define SERVER_PORT 5000
 #define MAX_MSG 100
 
 char *dataName[3];

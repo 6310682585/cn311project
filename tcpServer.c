@@ -13,7 +13,7 @@
 #define ERROR 1
 
 #define END_LINE 0x0
-#define SERVER_PORT 12585
+#define SERVER_PORT 5000
 #define MAX_MSG 100
 
 char *dataName[3];
@@ -367,40 +367,43 @@ int main(int argc, char *argv[])
 					write(newSd, sendBuff, strlen(sendBuff));
 					close(newSd);
 				}
-				if (check_valid(board[x][y]) == 1)
+				else
 				{
-					printf("client move :\n");
-					board[x][y] = 'O';
-					draw_board(board);
-					strcpy(xo, "");
-					append(xo, 'b');
-					xo_board(board);
-
-					check_result(board);
-					if (result == 'w')
+						if (check_valid(board[x][y]) == 1)
 					{
-						append(xo, 'w');
+						printf("client move :\n");
+						board[x][y] = 'O';
+						draw_board(board);
+						strcpy(xo, "");
+						append(xo, 'b');
+						xo_board(board);
+
+						check_result(board);
+						if (result == 'w')
+						{
+							append(xo, 'w');
+						}
+						else
+						{
+							printf("sever move :\n");
+							choose_x_block(board);
+							draw_board(board);
+							check_result(board);
+							append(xo, result);
+							append(xo, 'b');
+							xo_board(board);
+						}
+
+						snprintf(sendBuff, sizeof(sendBuff), xo);
+						write(newSd, sendBuff, strlen(sendBuff));
+						close(newSd);
 					}
 					else
 					{
-						printf("sever move :\n");
-						choose_x_block(board);
-						draw_board(board);
-						check_result(board);
-						append(xo, result);
-						append(xo, 'b');
-						xo_board(board);
+						snprintf(sendBuff, sizeof(sendBuff), " this block had been selected, please choose another block\n");
+						write(newSd, sendBuff, strlen(sendBuff));
+						close(newSd);
 					}
-
-					snprintf(sendBuff, sizeof(sendBuff), xo);
-					write(newSd, sendBuff, strlen(sendBuff));
-					close(newSd);
-				}
-				else
-				{
-					snprintf(sendBuff, sizeof(sendBuff), " this block had been selected, please choose another block\n");
-					write(newSd, sendBuff, strlen(sendBuff));
-					close(newSd);
 				}
 			}
 		}
