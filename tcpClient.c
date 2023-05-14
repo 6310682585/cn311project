@@ -111,44 +111,69 @@ int main(int argc, char *argv[])
   while ((n = read(sd, recvBuff, sizeof(recvBuff) - 1)) > 0)
   {
     // printf("%s\n", recvBuff);
-    if (recvBuff[0] == 's')
+    if (recvBuff[0] == ' ')
     {
-      for (i = 0; i <= 3; i++)
+      recvBuff[n] = 0;
+      if (fputs(recvBuff, stdout) == EOF)
       {
-        for (j = 0; j <= 3; i++)
-        {
-          board[i][j] = ' ';
-        }
+        printf("\n Error : Fputs error\n");
       }
-      draw_board(board);
+
+      if (recvBuff[1] == 's')
+      {
+        for (i = 0; i <= 3; i++)
+        {
+          for (j = 0; j <= 3; i++)
+          {
+            board[i][j] = ' ';
+          }
+        }
+        draw_board(board);
+      }
     }
-    else
+    else if (recvBuff[0] == 'b' || recvBuff[0] == 't')
     {
       for (i = 0; i <= 15; i++)
       {
         x = i / 4;
         y = i % 4;
-        board[x][y] = recvBuff[i];
+        board[x][y] = recvBuff[i + 1];
       }
-
-      if (recvBuff[16] == 'c')
+      if (recvBuff[0] == 'b')
       {
         printf("your move :\n");
-        draw_board(board);
+      }
+      draw_board(board);
 
+      if (recvBuff[18] == 'b')
+      {
         for (i = 0; i <= 15; i++)
         {
           x = i / 4;
           y = i % 4;
-          board[x][y] = recvBuff[i + 17];
+          board[x][y] = recvBuff[i + 19];
         }
         printf("\nsever move :\n");
         draw_board(board);
+      }
+
+      if (recvBuff[17] == 'c')
+      {
         printf("\nyour turn!\n\n");
       }
+      else if (recvBuff[17] == 'l')
+      {
+        printf("\nyour lose!\n\n");
+      }
+      else if (recvBuff[17] == 'w')
+      {
+        printf("\nyour win!\n");
+      }
+      else if (recvBuff[17] == 'f')
+      {
+        printf("\nboard full please start again for retry\n");
+      }
     }
-
-    recvBuff[n] = 0;
   }
 
   if (n < 0)
