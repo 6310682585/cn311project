@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <unistd.h> /* close */
 #include <string.h>
+#include <stdlib.h>
 
 #define SERVER_PORT 5000
 #define MAX_MSG 100

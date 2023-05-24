@@ -39,18 +39,18 @@ int countO[3][4] = {{0, 0, 0, 0},
 
 /* function */
 int read_line();
-int random_number();
-void draw_board();
-void append();
-void xo_board();
-void count_xo();
-void *result_horizon_vertical();
-void *result_diagonal();
-void *result_boardFull();
-char check_result();
-int check_valid();
-int check_point();
-void choose_x_block();
+int random_number(int size);
+void draw_board(char board[][4]);
+void append(char *s, char c);
+void xo_board(char board[][4]);
+void count_xo(char board[][4]);
+void *result_horizon_vertical(void *arg);
+void *result_diagonal(void *arg);
+void *result_boardFull(void *arg);
+char check_result(char board[][4]);
+int check_valid(char point);
+int check_point(int x, int y);
+void choose_x_block(char board[][4]);
 
 int main(int argc, char *argv[])
 {
@@ -225,6 +225,18 @@ int main(int argc, char *argv[])
 	} /* while (1) */
 }
 
+/* WARNING WARNING WARNING WARNING WARNING WARNING WARNING       */
+/* this function is experimental.. I don't know yet if it works  */
+/* correctly or not. Use Steven's readline() function to have    */
+/* something robust.                                             */
+/* WARNING WARNING WARNING WARNING WARNING WARNING WARNING       */
+
+/* rcv_line is my function readline(). Data is read from the socket when */
+/* needed, but not byte after bytes. All the received data is read.      */
+/* This means only one call to recv(), instead of one call for           */
+/* each received byte.                                                   */
+/* You can set END_CHAR to whatever means endofline for you. (0x0A is \n)*/
+/* read_lin returns the number of bytes returned in line_to_return       */
 int read_line(int newSd, char *line_to_return)
 {
 
